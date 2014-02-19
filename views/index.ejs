@@ -7,16 +7,24 @@ $(document).ready(function() {
 		user = <%- JSON.stringify(user) %>,
 		ENTER_KEY = 13;
 
+	ws.onopen = function() {
+		ws.send(JSON.stringify(["start"]));
+	}
+
 	ws.onmessage = function(data, flags) {
 		var x = JSON.parse(data.data);
 
 		if (x.hasOwnProperty("directive") && parseInt(x.from, 10) !== user.id) {
-			ws.send(JSON.stringify([user.id, $("#directText").val(), "direct"]))
+			ws.send(JSON.stringify([user.id, $("#directText").val(), "direct"]));
 		}
 	};
 
 	function registerCommand() {
 		ws.send(JSON.stringify([user.id, $("#commandText").val(), "broadcast"]));
+	}
+
+	function sendDirect() {
+		ws.send(JSON.stringify([user.id, $("#directText").val(), "direct"]));
 	}
 
 	//Detect when someone presses enter key, send the input to the server and clear input
@@ -30,6 +38,7 @@ $(document).ready(function() {
 	});
 
 	$("#register").click(registerCommand);
+	$("#directCmd").click(sendDirect);
 });
 
 </script>
@@ -41,8 +50,7 @@ $(document).ready(function() {
 	<a href="/auth/twitchtv">Log In</a>
 	</p>
 <% } else { %>
-	<h2>Hello, <%= user.username %>.</h2>
-	<a href="/test">Initiate Coup de Twitch!</a>
+	<h2>Hello, <%= user.username %>, welcome to Coup de Twitch!</h2>
 	<input style="display: block" id="directText" type="text" />
 	<button id="directCmd">Send to Twitch's chat</button>
 	<input style="display: block" id="commandText" type="text" />

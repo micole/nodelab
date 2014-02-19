@@ -7,12 +7,13 @@ var http = require('http'),
     util = require('util'),
     fs = require('fs'),
     TwitchtvStrategy = require('passport-twitchtv').Strategy,
-    key = fs.readFileSync(__dirname + '/dildos.key'),
-    cert = fs.readFileSync(__dirname + '/certificate.pem'),
+    // key = fs.readFileSync(__dirname + '/dildos.key'),
+    // cert = fs.readFileSync(__dirname + '/certificate.pem'),
     irc = require('irc'),
     twitchAccessToken = null,
-    bot = null,
     broadcastMap = {};
+
+this.bot = null;
     // nodebot = require('./nodebot');
 
 //Constants/Finals
@@ -138,7 +139,7 @@ app.get('/addcmd', function(req, res) {
 
 app.listen(3000);
 
-function connectIrcBot() {
+this.connectIrcBot = function() {
     console.log(twitchAccessToken);
     var channel = "#twitchplayspokemon";
 
@@ -152,7 +153,7 @@ function connectIrcBot() {
 
     var irc = require('irc');
 
-    bot = new irc.Client(
+    this.bot = new irc.Client(
         config.server,
         config.botName,
         {
@@ -162,8 +163,8 @@ function connectIrcBot() {
         }
     );
 
-    bot.addListener("message", function(from, to, text, message) {
-        if (from === "dipperderp") {
+    this.bot.addListener("message", function(from, to, text, message) {
+        if (from === "diaper_sniper") {
             console.log(message);
             console.log("Diaper sniper said something!");
             console.log(text);
@@ -171,7 +172,7 @@ function connectIrcBot() {
 
     });
 
-    bot.addListener("registered", function(message) {
+    this.bot.addListener("registered", function(message) {
         console.log("IRC bot connected to the server");
         // bot.send(".join #twitchplayspokemon");
         // bot.join("#diaper_sniper", function(arg) {
@@ -179,12 +180,12 @@ function connectIrcBot() {
         // });
     });
 
-    bot.addListener('kill', function(nick, reason, channels, message) {
+    this.bot.addListener('kill', function(nick, reason, channels, message) {
         console.log("Connection died with IRC");
         console.log(reason);
     });
 
-    bot.addListener('join' + channel, function(nick, message) {
+    this.bot.addListener('join' + channel, function(nick, message) {
         if (nick === "diaper_sniper") {
             console.log("We've connected to the channel");
             // bot.say(channel, 'UUUUUUUUUUUUUP');
