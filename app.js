@@ -11,7 +11,8 @@ var http = require('http'),
     // cert = fs.readFileSync(__dirname + '/certificate.pem'),
     irc = require('irc'),
     twitchAccessToken = null,
-    broadcastMap = {};
+    broadcastMap = {},
+    callbackEndpoint = "http://localhost:3000";
 
 this.bot = null;
     // nodebot = require('./nodebot');
@@ -33,7 +34,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new TwitchtvStrategy({
     clientID: TWITCHTV_CLIENT_ID,
     clientSecret: TWITCHTV_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/twitchtv/callback"
+    callbackURL: callbackEndpoint + "/auth/twitchtv/callback"
   },
   function(accessToken, refreshToken, profile, done) {
     console.log(profile);
