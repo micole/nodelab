@@ -11,7 +11,8 @@ var http = require('http'),
     cert = fs.readFileSync(__dirname + '/certificate.pem'),
     irc = require('irc'),
     twitchAccessToken = null,
-    bot = null;
+    bot = null,
+    broadcastMap = {};
     // nodebot = require('./nodebot');
 
 //Constants/Finals
@@ -131,6 +132,7 @@ app.get('/chat/sayup', function(req, res) {
 
 app.get('/addcmd', function(req, res) {
     console.log("They want me to add a command");
+    console.log(req);
     res.render('index');
 });
 
