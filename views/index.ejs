@@ -1,7 +1,38 @@
 <!DOCTYPE html>
 <head>
-<script src="https://ttv-api.s3.amazonaws.com/twitch.min.js" type="text/javascript"></script>
-<script>
+<script src="http://code.jquery.com/jquery-2.1.0.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	var wsEndpoint = 'ws://appendixg.com:8080/ws';
+
+	var ws = new WebSocket('ws://localhost:8080/ws'),
+		user = <%- JSON.stringify(user) %>,
+		ENTER_KEY = 13;
+
+	ws.onmessage = function(data, flags) {
+		var x = JSON.parse(data.data);
+
+		if (x.hasOwnProperty("directive") && parseInt(x.from, 10) !== user.id) {
+
+		}
+	};
+
+	function registerCommand() {
+		ws.send(JSON.stringify([user.id, $("#commandText").val()]));
+	}
+
+	//Detect when someone presses enter key, send the input to the server and clear input
+	$('#commandText').keypress(function (e) {
+		if (e.which == ENTER_KEY) {
+			registerCommand();
+			// return false;
+			e.preventDefault();
+			$("#commandText").val("");
+		}
+	});
+
+	$("#register").click(registerCommand);
+});
 
 </script>
 </head>
@@ -15,4 +46,6 @@
 	<h2>Hello, <%= user.username %>.</h2>
 	<a href="/test">Initiate Coup de Twitch!</a>
 	<a href="/chat/sayup">Say UUUUUP!!!</a>
+	<input style="display: block" id="commandText" type="text" />
+	<button id="register">Register this command on next tick</button>
 <% } %>

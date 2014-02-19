@@ -2,6 +2,7 @@ var http = require('http'),
     https = require('https'),
     express = require('express'),
     passport = require('passport'),
+    wscontroller = require('./WebsocketController'),
     channel = 'twitchplayspokemon',
     util = require('util'),
     fs = require('fs'),
@@ -125,7 +126,13 @@ app.get('/chat/sayup', function(req, res) {
     }
 
     res.render('index', {user: req.user});
-})
+});
+
+
+app.get('/addcmd', function(req, res) {
+    console.log("They want me to add a command");
+    res.render('index');
+});
 
 app.listen(3000);
 
@@ -154,8 +161,6 @@ function connectIrcBot() {
     );
 
     bot.addListener("message", function(from, to, text, message) {
-        // bot.say(config.channels[0],)
-        // console.log(from);
         if (from === "dipperderp") {
             console.log(message);
             console.log("Diaper sniper said something!");
@@ -178,8 +183,6 @@ function connectIrcBot() {
     });
 
     bot.addListener('join' + channel, function(nick, message) {
-        // console.log(nick);
-        // console.log("User joined: " + nick);
         if (nick === "diaper_sniper") {
             console.log("We've connected to the channel");
             // bot.say(channel, 'UUUUUUUUUUUUUP');
