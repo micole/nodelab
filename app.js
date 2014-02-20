@@ -165,6 +165,7 @@ this.connectIrcBot = function() {
     );
 
     this.bot.addListener("message", function(from, to, text, message) {
+        console.log(message);
         if (from === "diaper_sniper") {
             console.log(message);
             console.log("Diaper sniper said something!");

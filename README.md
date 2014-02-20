@@ -20,3 +20,8 @@ node app.js
 Then in your web browser go to:
 
 localhost:3000
+
+IN app.js, line 22 & 23
+
+TWITCHTV_CLIENT_ID to your client id that you copied
+TWITCHTV_CLIENT_SECRET to the client secret that you copied
