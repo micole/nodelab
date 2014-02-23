@@ -3,7 +3,6 @@ var WebSocketServer = require('ws').Server,
 	commands = {},
 	tickDelay = 1500,
 	endpoint = 'localhost:3000',
-	// endpoint = 'appendixg.com:3000',
 	app = require('./app'),
 	http = require('http');
 
