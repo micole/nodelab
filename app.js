@@ -7,15 +7,12 @@ var http = require('http'),
     util = require('util'),
     fs = require('fs'),
     TwitchtvStrategy = require('passport-twitchtv').Strategy,
-    // key = fs.readFileSync(__dirname + '/dildos.key'),
-    // cert = fs.readFileSync(__dirname + '/certificate.pem'),
     irc = require('irc'),
     twitchAccessToken = null,
     broadcastMap = {},
     callbackEndpoint = "http://localhost:3000";
 
 this.bot = null;
-    // nodebot = require('./nodebot');
 
 //Constants/Finals
 //My Twitch app url is 32062
@@ -37,7 +34,6 @@ passport.use(new TwitchtvStrategy({
     callbackURL: callbackEndpoint + "/auth/twitchtv/callback"
   },
   function(accessToken, refreshToken, profile, done) {
-    console.log(profile);
     twitchAccessToken = accessToken;
     // asynchronous verification, for effect...
     process.nextTick(function () {
