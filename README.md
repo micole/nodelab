@@ -17,18 +17,39 @@ Navigate to the directory where you installed nodelab:
 cd nodelab
 
 npm install
+```
 
-node app.js
+### Configuration
+
+You need to copy the config.js.example into config.js
+
+```javascript
+cp config.js.example config.js
+```
+
+Then change your configs to what you get from your OAuth provider.
+
+```javascript
+config.callbackRoute = '/auth/callback';		//Callback for when you authenticate with OAuth provider
+config.callbackEndpoint = 'http://yourdomain.com';	//Callback endpoint
+
+config.clientId = 'some crazy hash';			//Provided client ID for your app
+config.clientSecret = 'another crazy hash';		//Provided client secret for your app
+
+config.useIRC = true;							//You can turn off the IRC bot
+config.ircServer = 'irc.derp.net';				//IRC FQDN or IP to connect to
+config.ircChannel = '#derpinhard';				//Channel to login the nodebot to
+config.ircUser = 'nodebot';						//Name of the IRC user
+config.webPort = 3000;							//Port for your web server to listen on
+config.sessionSecret = 'stuff that should be a session secret'; //Session secret for your web server
+
+node app.js  //This will run the server
 ```
 
 Then in your web browser go to:
 
 localhost:3000
 
-```javascript
-config.client_id to your client id that you copied
-config.client_secret to the client secret that you copied
-```
 
 ### Slides:
 http://slid.es/paulshahid/javascript

@@ -1,23 +1,24 @@
+//Requires first!
 var http = require('http'),
     https = require('https'),
     express = require('express'),
     passport = require('passport'),
-    wscontroller = require('./WebsocketController'),
-    channel = 'twitchplayspokemon',
     util = require('util'),
     fs = require('fs'),
-    TwitchtvStrategy = require('passport-twitchtv').Strategy,
     irc = require('irc'),
-    twitchAccessToken = null,
+    config = require('./config'),
+    wscontroller = require('./WebsocketController'),
+    TwitchtvStrategy = require('passport-twitchtv').Strategy;
+
+//Other sturff 
+var channel = 'twitchplayspokemon',
+    oauthAccessToken = null,
     broadcastMap = {},
-    callbackEndpoint = "http://localhost:3000";
+    callbackEndpoint = "http://localhost:3000",
+    self = this;
 
 this.bot = null;
-
-//Constants/Finals
-//My Twitch app url is 32062
-var TWITCHTV_CLIENT_ID = '1mdd2p3xi5ykz9z32aub3fuhyeo2qu2',
-    TWITCHTV_CLIENT_SECRET = 'l1o1ekzgofz7lmu32u8w4i7o0u05ozq';
+this.app = null;
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -29,12 +30,12 @@ passport.deserializeUser(function(obj, done) {
 
 
 passport.use(new TwitchtvStrategy({
-    clientID: TWITCHTV_CLIENT_ID,
-    clientSecret: TWITCHTV_CLIENT_SECRET,
-    callbackURL: callbackEndpoint + "/auth/twitchtv/callback"
+    clientID: config.clientId,
+    clientSecret: config.clientSecret,
+    callbackURL: config.callbackEndpoint + config.callbackRoute
   },
   function(accessToken, refreshToken, profile, done) {
-    twitchAccessToken = accessToken;
+    oauthAccessToken = accessToken;
     // asynchronous verification, for effect...
     process.nextTick(function () {
       
@@ -48,35 +49,35 @@ passport.use(new TwitchtvStrategy({
 ));
 
 
-var app = express.createServer();
+this.app = express.createServer();
 
 // configure Express
-app.configure(function() {
-    app.set('views', __dirname + '/views');
-    app.set('view engine', 'ejs');
-    app.use(express.logger());
-    app.use(express.cookieParser());
-    app.use(express.bodyParser());
-    app.use(express.methodOverride());
-    app.use(express.session({ secret: 'keyboard cat' }));
+this.app.configure(function() {
+    self.app.set('views', __dirname + '/views');
+    self.app.set('view engine', 'ejs');
+    self.app.use(express.logger());
+    self.app.use(express.cookieParser());
+    self.app.use(express.bodyParser());
+    self.app.use(express.methodOverride());
+    self.app.use(express.session({ secret: 'keyboard cat' }));
     // Initialize Passport!  Also use passport.session() middleware, to support
     // persistent login sessions (recommended).
-    app.use(passport.initialize());
-    app.use(passport.session());
-    app.use(app.router);
-    app.use(express.static(__dirname + '/public'));
+    self.app.use(passport.initialize());
+    self.app.use(passport.session());
+    self.app.use(self.app.router);
+    self.app.use(express.static(__dirname + '/public'));
 });
 
 
-app.get('/', function(req, res){
+this.app.get('/', function(req, res){
     res.render('index', { user: req.user });
 });
 
-app.get('/account', ensureAuthenticated, function(req, res){
+this.app.get('/account', ensureAuthenticated, function(req, res){
     res.render('account', { user: req.user });
 });
 
-app.get('/login', function(req, res){
+this.app.get('/login', function(req, res){
     res.render('login', { user: req.user });
 });
 
@@ -85,7 +86,7 @@ app.get('/login', function(req, res){
 //   request.  The first step in Twitch.tv authentication will involve
 //   redirecting the user to Twitch.tv.  After authorization, Twitch.tv will
 //   redirect the user back to this application at /auth/twitchtv/callback
-app.get('/auth/twitchtv',
+this.app.get('/auth/twitchtv',
     passport.authenticate('twitchtv', { scope: [ 'user_read', 'chat_login', 'channel_read' ] }),
     function(req, res){
     // The request will be redirected to Twitch.tv for authentication, so this
@@ -97,13 +98,13 @@ app.get('/auth/twitchtv',
 //   request.  If authentication fails, the user will be redirected back to the
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
-app.get('/auth/twitchtv/callback', 
+this.app.get('/auth/twitchtv/callback', 
     passport.authenticate('twitchtv', { failureRedirect: '/login' }),
     function(req, res) {
         res.redirect('/');
     });
 
-app.get('/logout', function(req, res){
+this.app.get('/logout', function(req, res){
     req.logout();
     res.redirect('/');
 });
@@ -113,13 +114,13 @@ app.get('/logout', function(req, res){
 ////////////Our own Methods///////////////////////////////////////
 //////////////////////////////////////////////////////////////////
 
-app.get('/test', function(req, res) {
+this.app.get('/test', function(req, res) {
     connectIrcBot();
 
     res.render('index', {user: req.user});
 });
 
-app.get('/chat/sayup', function(req, res) {
+this.app.get('/chat/sayup', function(req, res) {
     if (bot) {
         bot.say("#twitchplayspokemon", "UUUUUUUUUUUUUP");
     }
@@ -128,13 +129,13 @@ app.get('/chat/sayup', function(req, res) {
 });
 
 
-app.get('/addcmd', function(req, res) {
+this.app.get('/addcmd', function(req, res) {
     console.log("They want me to add a command");
     console.log(req);
     res.render('index');
 });
 
-app.listen(3000);
+this.app.listen(3000);
 
 this.connectIrcBot = function() {
     console.log(twitchAccessToken);

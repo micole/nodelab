@@ -1,0 +1,17 @@
+//OAuth2 callback
+config.callbackRoute = ''; 	//URI route
+config.callbackEndpoint = ''; 	//Domain name/IP endpoint
+
+//OAuth2 id and secrets
+config.clientId = '';
+config.clientSecret = '';
+
+//IRC Channel for the nodebot to connect to
+config.ircServer = '';		//Domain name or IP address
+config.ircPort = 6667;
+config.ircChannel = '';
+config.ircUser = '';
+
+//Port for the web server to listen on
+config.webPort = 3000;
+config.sessionSecret = 'keyboard cat';
