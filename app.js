@@ -11,10 +11,10 @@ var http = require('http'),
     TwitchtvStrategy = require('passport-twitchtv').Strategy;
 
 //Other sturff 
-var channel = 'twitchplayspokemon',
+var channel = config.ircChannel,
     oauthAccessToken = null,
     broadcastMap = {},
-    callbackEndpoint = "http://localhost:3000",
+    callbackEndpoint = config.callbackEndpoint,
     self = this;
 
 this.bot = null;
@@ -32,10 +32,11 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new TwitchtvStrategy({
     clientID: config.clientId,
     clientSecret: config.clientSecret,
-    callbackURL: config.callbackEndpoint + config.callbackRoute
+    callbackURL: callbackEndpoint + config.callbackRoute
   },
   function(accessToken, refreshToken, profile, done) {
     oauthAccessToken = accessToken;
+
     // asynchronous verification, for effect...
     process.nextTick(function () {
       
@@ -120,75 +121,40 @@ this.app.get('/test', function(req, res) {
     res.render('index', {user: req.user});
 });
 
-this.app.get('/chat/sayup', function(req, res) {
-    if (bot) {
-        bot.say("#twitchplayspokemon", "UUUUUUUUUUUUUP");
-    }
-
-    res.render('index', {user: req.user});
-});
-
-
 this.app.get('/addcmd', function(req, res) {
-    console.log("They want me to add a command");
-    console.log(req);
     res.render('index');
 });
 
-this.app.listen(3000);
+this.app.listen(config.webPort);
 
 this.connectIrcBot = function() {
-    console.log(twitchAccessToken);
-    var channel = "#twitchplayspokemon";
-
-    var config = {
-        channels: [channel],
-        server: "199.9.252.26",
-        botName: "diaper_sniper",
-        port: 6667,
-        showErrors: true
-    };
-
-    var irc = require('irc');
+    var channel = config.ircChannel,
+        irc = require('irc');
 
     this.bot = new irc.Client(
         config.server,
         config.botName,
         {
             channels: config.channels,
-            password: "oauth:" + twitchAccessToken,
-            port: 6667
+            password: "oauth:" + oauthAccessToken,
+            port: config.ircPort
         }
     );
 
     this.bot.addListener("message", function(from, to, text, message) {
-        console.log(message);
-        if (from === "diaper_sniper") {
-            console.log(message);
-            console.log("Diaper sniper said something!");
-            console.log(text);
-        }
 
     });
 
     this.bot.addListener("registered", function(message) {
-        console.log("IRC bot connected to the server");
-        // bot.send(".join #twitchplayspokemon");
-        // bot.join("#diaper_sniper", function(arg) {
-        //     console.log("Joined twitch plays pokemon");
-        // });
+
     });
 
     this.bot.addListener('kill', function(nick, reason, channels, message) {
-        console.log("Connection died with IRC");
-        console.log(reason);
+
     });
 
     this.bot.addListener('join' + channel, function(nick, message) {
-        if (nick === "diaper_sniper") {
-            console.log("We've connected to the channel");
-            // bot.say(channel, 'UUUUUUUUUUUUUP');
-        }
+
     });
 }
 
