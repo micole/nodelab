@@ -10,6 +10,7 @@ var http = require('http'),
     wscontroller = require('./WebsocketController'),
     TwitchtvStrategy = require('passport-twitchtv').Strategy;
 
+console.log(config);
 //Other sturff 
 var channel = config.ircChannel,
     oauthAccessToken = null,
@@ -69,9 +70,19 @@ this.app.configure(function() {
     self.app.use(express.static(__dirname + '/public'));
 });
 
+//Forgive me, father, for I am sinning. Lead me not into hacking,
+//but deliver me from broken code. For thine is the kingdom, the
+//power and the node. Forever and ever. Until it's not FOTM. Amen.
+this.app.get("/scripts/autobahn.min.js", function (req, res) {
+    res.sendfile(__dirname + "/scripts/autobahn.min.js");
+});
 
 this.app.get('/', function(req, res){
-    res.render('index', { user: req.user });
+    var scripts = [
+        './scripts/autobahn.min.js'
+    ];
+
+    res.render('index', { user: req.user, scripts: scripts});
 });
 
 this.app.get('/account', ensureAuthenticated, function(req, res){
@@ -79,7 +90,7 @@ this.app.get('/account', ensureAuthenticated, function(req, res){
 });
 
 this.app.get('/login', function(req, res){
-    res.render('login', { user: req.user });
+    res.render('login', { user: req.user, scripts: scripts});
 });
 
 // GET /auth/twitchtv

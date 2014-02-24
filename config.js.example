@@ -15,3 +15,7 @@ config.ircUser = '';
 //Port for the web server to listen on
 config.webPort = 3000;
 config.sessionSecret = 'keyboard cat';
+
+//Websocket stuff
+config.wsPort = 8080;
+config.wsEndpoint = 'yourdomain.com/ws';
