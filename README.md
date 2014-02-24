@@ -53,3 +53,10 @@ localhost:3000
 
 ### Slides:
 http://slid.es/paulshahid/javascript
+
+### Todo:
+
+* Abstract transport layer into its own file to handle opening, closing, events, pub/sub, rpc
+* Put an output of the IRC chat into a text window
+* Allow a connection to the hive
+* Include a hive file/config

@@ -78,11 +78,7 @@ this.app.get("/scripts/autobahn.min.js", function (req, res) {
 });
 
 this.app.get('/', function(req, res){
-    var scripts = [
-        './scripts/autobahn.min.js'
-    ];
-
-    res.render('index', { user: req.user, scripts: scripts});
+    res.render('index', { user: req.user});
 });
 
 this.app.get('/account', ensureAuthenticated, function(req, res){
