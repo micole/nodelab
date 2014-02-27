@@ -55,7 +55,7 @@ this.app = express.createServer();
 
 // configure Express
 this.app.configure(function() {
-    self.app.set('views', __dirname + '/views');
+    self.app.set('views', __dirname + '/public/views');
     self.app.set('view engine', 'ejs');
     self.app.use(express.logger());
     self.app.use(express.cookieParser());
