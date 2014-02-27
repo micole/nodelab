@@ -62,8 +62,6 @@ this.app.configure(function() {
     self.app.use(express.bodyParser());
     self.app.use(express.methodOverride());
     self.app.use(express.session({ secret: 'keyboard cat' }));
-    // Initialize Passport!  Also use passport.session() middleware, to support
-    // persistent login sessions (recommended).
     self.app.use(passport.initialize());
     self.app.use(passport.session());
     self.app.use(self.app.router);
