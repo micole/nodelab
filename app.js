@@ -65,6 +65,8 @@ this.app.configure(function() {
     self.app.use(passport.initialize());
     self.app.use(passport.session());
     self.app.use(self.app.router);
+
+    //For some reason we need /scripts in there as well...maybe it needs bottom-most dir?
     self.app.use(express.static(__dirname + '/public'));
     self.app.use(express.static(__dirname + '/scripts'));
 });
@@ -72,9 +74,6 @@ this.app.configure(function() {
 //Forgive me, father, for I am sinning. Lead me not into hacking,
 //but deliver me from broken code. For thine is the kingdom, the
 //power and the node. Forever and ever. Until it's not FOTM. Amen.
-// this.app.get("/scripts/autobahn.min.js", function (req, res) {
-//     res.sendfile(__dirname + "/scripts/autobahn.min.js");
-// });
 
 this.app.get('/', function(req, res){
     res.render('index', { user: req.user});
