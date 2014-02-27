@@ -60,3 +60,7 @@ http://slid.es/paulshahid/javascript
 * Put an output of the IRC chat into a text window
 * Allow a connection to the hive
 * Include a hive file/config
+* Find a way to host scripts on the server side, possibly with async mod loader
+* Convert to SPA
+* Include bewtstrap or some other CSS/JS framework for gooeys
+* Get rid of expressjs in favor of something better for SPAs
