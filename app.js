@@ -66,14 +66,15 @@ this.app.configure(function() {
     self.app.use(passport.session());
     self.app.use(self.app.router);
     self.app.use(express.static(__dirname + '/public'));
+    self.app.use(express.static(__dirname + '/scripts'));
 });
 
 //Forgive me, father, for I am sinning. Lead me not into hacking,
 //but deliver me from broken code. For thine is the kingdom, the
 //power and the node. Forever and ever. Until it's not FOTM. Amen.
-this.app.get("/scripts/autobahn.min.js", function (req, res) {
-    res.sendfile(__dirname + "/scripts/autobahn.min.js");
-});
+// this.app.get("/scripts/autobahn.min.js", function (req, res) {
+//     res.sendfile(__dirname + "/scripts/autobahn.min.js");
+// });
 
 this.app.get('/', function(req, res){
     res.render('index', { user: req.user});
