@@ -2,6 +2,9 @@
 <head>
 <script src="/scripts/jquery.min.js" type="text/javascript"></script>
 <script src="/scripts/autobahn.min.js" type="text/javascript"></script>
+<script src="/scripts/bootstrap.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+<link rel="stylesheet" href="/stylesheets/bootstrap-theme.min.css">
 </head>
 <body>
 <% if (!user) { %>
@@ -13,9 +16,9 @@
 <% } else { %>
 	<h2>Hello, <%= user.username %>, welcome to Coup de Twitch!</h2>
 	<input style="display: block" id="directText" type="text" />
-	<button id="directCmd">Send to Twitch's chat</button>
+	<button type="button" class="btn btn-default"  id="directCmd">Send to Twitch's chat</button>
 	<input style="display: block" id="commandText" type="text" />
-	<button id="register">Register this command on next tick</button>
+	<button type="button" class="btn btn-default" id="register">Register this command on next tick</button>
 <% } %>
 <!-- Put your scripts at the bottom, nerd -->
 <script type="text/javascript">

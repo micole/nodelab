@@ -69,6 +69,8 @@ this.app.configure(function() {
     //For some reason we need /scripts in there as well...maybe it needs bottom-most dir?
     self.app.use(express.static(__dirname + '/public'));
     self.app.use(express.static(__dirname + '/scripts'));
+    self.app.use(express.static(__dirname + '/stylesheets'));
+    self.app.use(express.static(__dirname + '/fonts'));
 });
 
 //Forgive me, father, for I am sinning. Lead me not into hacking,
@@ -79,9 +81,9 @@ this.app.get('/', function(req, res){
     res.render('index', { user: req.user});
 });
 
-this.app.get('/account', ensureAuthenticated, function(req, res){
-    res.render('account', { user: req.user });
-});
+// this.app.get('/account', ensureAuthenticated, function(req, res){
+//     res.render('account', { user: req.user });
+// });
 
 this.app.get('/login', function(req, res){
     res.render('login', { user: req.user, scripts: scripts});
